@@ -26,7 +26,7 @@ public class JobScheduler {
 
     // Roda a cada 24 horas (exemplo)
     @Scheduled(cron = "0 0 * * * *")
-    public void runScheduled() {
+    public void coinListSchedule() {
         coinsListService.runIngestion();
     }
 
