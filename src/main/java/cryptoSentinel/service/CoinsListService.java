@@ -1,5 +1,6 @@
 package cryptoSentinel.service;
 
+import cryptoSentinel.config.UriProperties;
 import cryptoSentinel.dto.CoinsListDTO;
 import cryptoSentinel.model.CoinsList;
 import cryptoSentinel.repository.CoinsListRepository;
@@ -20,11 +21,12 @@ public class CoinsListService {
 
     private final WebClient coingeckoWebClient;
     private final CoinsListRepository coinsListRepository;
+    private final UriProperties uriProperties;
     private static final Logger log = LoggerFactory.getLogger(CoinsListService.class);
 
     public Flux<CoinsListDTO> getRemoteCoins() {
         return coingeckoWebClient.get()
-                .uri("/coins/list")
+                .uri(uriProperties.getCoinListUrl())
                 .retrieve()
                 .bodyToFlux(CoinsListDTO.class);
     }
