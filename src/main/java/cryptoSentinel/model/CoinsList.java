@@ -11,20 +11,21 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "crypto_prices")
-public class CryptoPrice {
+@NoArgsConstructor
+@Document(indexName = "coins_list")
+public class CoinsList {
 
     @Id
     private String id;
 
     private String symbol;
 
-    private Double price;
+    private String name;
+
+    private String platforms;
 
     @Field(type = FieldType.Date)
-
     private LocalDateTime timestamp;
 
 }
