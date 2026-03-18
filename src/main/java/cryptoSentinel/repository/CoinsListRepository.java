@@ -1,13 +1,13 @@
 package cryptoSentinel.repository;
 
-import cryptoSentinel.model.CryptoPrice;
+import cryptoSentinel.model.CoinsList;
 import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository
-public interface CryptoPriceRepository extends ReactiveElasticsearchRepository<CryptoPrice, String> {
+public interface CoinsListRepository extends ReactiveElasticsearchRepository<CoinsList, String> {
 
-    Flux<CryptoPrice> findBySymbol(String symbol);
+    Flux<CoinsList> save(String symbol);
 
 }
