@@ -200,6 +200,3 @@ Este projeto demonstra experiência prática com:
 
 ---
 
-# Licença
-
-MIT License
