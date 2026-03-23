@@ -1,6 +1,7 @@
 package cryptoSentinel.infrastructure;
 
 import cryptoSentinel.service.CoinsListService;
+import cryptoSentinel.service.CoinsMarketService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class JobScheduler {
 
     private final CoinsListService coinsListService;
+    private final CoinsMarketService coinsMarketService;
     private static final Logger log = LoggerFactory.getLogger(JobScheduler.class);
 
     // Roda ao iniciar
@@ -28,6 +30,12 @@ public class JobScheduler {
     @Scheduled(cron = "0 0 * * * *")
     public void coinListSchedule() {
         coinsListService.runIngestion();
+    }
+
+    // Roda a cada 5 minutos
+    @Scheduled(cron = "*/5 * * * *")
+    public void coinsMarketSchedule() {
+        coinsMarketService.coinsMarketIngestion();
     }
 
 }
