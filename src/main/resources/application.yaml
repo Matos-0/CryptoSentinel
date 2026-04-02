@@ -14,6 +14,7 @@ logging:
     org.springframework.data.elasticsearch.client.WIRE: TRACE # Para ver as queries no console
     org.springframework.web.reactive.function.client.WebClient: DEBUG # Para ver as chamadas da API
 
-uri_properties:
+uri-properties:
   baseUrl: https://api.coingecko.com/api/v3
   CoinListUrl: /coins/list
+  CoinMarketUrl: /coins/markets

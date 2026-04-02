@@ -27,7 +27,6 @@ public class CoinsMarketService {
     private static final Logger log = LoggerFactory.getLogger(CoinsMarketService.class);
     private final ObjectMapper objectMapper;
 
-    //salva dados no elasticsearh
     public void coinsMarketIngestion() {
 
         CoinsMarketsQuery query = new CoinsMarketsQuery();
@@ -55,7 +54,7 @@ public class CoinsMarketService {
                 );
     }
 
-    //onten dados direto da API (sem gravar no Elastic)
+    // obtén dados direto da API -> Stream
     public Mono<String> getCoinsMarket(CoinsMarketsQuery query) {
 
         Map<String, Object> queryMap = objectMapper.convertValue(query, new TypeReference<Map<String, Object>>() {

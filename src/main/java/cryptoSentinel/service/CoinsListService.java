@@ -45,9 +45,9 @@ public class CoinsListService {
                     );
                     return coinsListRepository.save(entity);
                 })
-                .doOnSubscribe(s -> log.info(" Iniciando ingestão de moedas..."))
+                .doOnSubscribe(s -> log.info("Iniciando ingestão de moedas..."))
                 .count()
-                .subscribe(total -> log.info(" Ingestão finalizada! Total de moedas salvas: {}", total));
+                .subscribe(total -> log.info("Ingestão finalizada! Total de moedas salvas: {}", total));
     }
 
 }
