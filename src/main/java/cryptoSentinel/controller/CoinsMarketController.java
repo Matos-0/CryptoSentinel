@@ -16,9 +16,9 @@ public class CoinsMarketController {
 
     private final CoinsMarketService coinsMarketService;
 
-//    @GetMapping(value = "/market", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public Mono<String> marketIngestion(CoinsMarketsQuery query) {
-//        return coinsMarketService.getCoinsMarket(query);
-//    }
+    @GetMapping(value = "/market", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<String> marketIngestion(CoinsMarketsQuery query) {
+        return coinsMarketService.getCoinsMarket(query);
+    }
 
 }

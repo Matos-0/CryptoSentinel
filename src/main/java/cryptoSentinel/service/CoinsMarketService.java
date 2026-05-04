@@ -11,6 +11,8 @@ import cryptoSentinel.repository.CoinsMarketRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -27,14 +29,14 @@ public class CoinsMarketService {
     private static final Logger log = LoggerFactory.getLogger(CoinsMarketService.class);
     private final ObjectMapper objectMapper;
 
-    public void coinsMarketIngestion() {
+    public Mono<Long> coinsMarketIngestion() {
 
         CoinsMarketsQuery query = new CoinsMarketsQuery();
 
         Map<String, Object> queryMap = objectMapper.convertValue(query, new TypeReference<Map<String, Object>>() {
         });
 
-        coingeckoWebClient.get()
+        return coingeckoWebClient.get()
                 .uri(uriBuilder -> {
                     uriBuilder.path(uriProperties.getCoinMarketUrl());
                     queryMap.forEach((key, value) -> {
@@ -44,14 +46,18 @@ public class CoinsMarketService {
                 })
                 .retrieve()
                 .bodyToFlux(CoinsMarketsDTO.class)
-                .map(dto -> new CoinsMarket())
-                .flatMap(coinsMarketRepository::save)
+                .map(CoinsMarket::new)
+                .flatMap(coin ->
+                        coinsMarketRepository.save(coin)
+                                .onErrorResume(e -> {
+                                    log.error("Erro ao salvar moeda específica: {}", e.getMessage());
+                                    return Mono.empty();
+                                })
+                )
                 .count()
-                .subscribe(
-                        saved -> log.info("Total de ativos salvos: {}", saved),
-                        error -> log.error("Erro ao salvar ativos"),
-                        () -> log.info("Processamento de ativos finalizado")
-                );
+                .doOnNext(saved -> log.info("Total de ativos salvos: {}", saved))
+                .doOnError(error -> log.error("Erro fatal no fluxo de ingestão: ", error))
+                .doOnTerminate(() -> log.info("Processamento de ativos finalizado"));
     }
 
     // obtén dados direto da API -> Stream

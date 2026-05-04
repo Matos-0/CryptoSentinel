@@ -31,7 +31,6 @@ public class CoinsListService {
                 .bodyToFlux(CoinsListDTO.class);
     }
 
-    @EventListener(ApplicationReadyEvent.class)
     public void runIngestion() {
         getRemoteCoins()
                 .flatMap(dto -> {
