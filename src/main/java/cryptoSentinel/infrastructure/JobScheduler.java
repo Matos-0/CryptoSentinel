@@ -1,6 +1,7 @@
 package cryptoSentinel.infrastructure;
 
 import cryptoSentinel.service.CoinsListService;
+import cryptoSentinel.service.CoinsMarketService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,18 +17,26 @@ import org.springframework.stereotype.Component;
 public class JobScheduler {
 
     private final CoinsListService coinsListService;
+    private final CoinsMarketService coinsMarketService;
     private static final Logger log = LoggerFactory.getLogger(JobScheduler.class);
 
-    // Roda ao iniciar
-    @EventListener(ApplicationReadyEvent.class)
-    public void runOnStart() {
+    @Scheduled(cron = "0 0 0 * * * ")
+    public void coinListSchedule() {
         coinsListService.runIngestion();
     }
 
-    // Roda a cada 24 horas (exemplo)
-    @Scheduled(cron = "0 0 * * * *")
-    public void runScheduled() {
-        coinsListService.runIngestion();
+    @Scheduled(cron = "0 */5 * * * *")
+    public void coinsMarketSchedule() {
+        log.info("Iniciando ingestão do método CoinMarket");
+        coinsMarketService.coinsMarketIngestion().subscribe();
     }
+
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void testeInjection() {
+//        log.info("Iniciando teste de ingestão CoinMarket");
+//        coinsMarketService.coinsMarketIngestion().subscribe();
+//    }
+
+    //todo -> agendamento para sanitizar registros com mais de 7 dias
 
 }

@@ -1,10 +1,13 @@
 package cryptoSentinel.config;
 
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@Getter
-@ConfigurationProperties(prefix = "uri_properties")
+@Data
+@Component
+@ConfigurationProperties(prefix = "uri-properties")
 public class UriProperties {
 
     private String baseUrl;
