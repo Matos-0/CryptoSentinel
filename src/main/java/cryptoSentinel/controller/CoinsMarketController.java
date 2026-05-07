@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/ingestion")
+@RequestMapping("/api/get")
 @RequiredArgsConstructor
 public class CoinsMarketController {
 
@@ -18,7 +18,7 @@ public class CoinsMarketController {
 
     @GetMapping(value = "/market", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<String> marketIngestion(CoinsMarketsQuery query) {
-        return coinsMarketService.getCoinsMarket(query);
+        return coinsMarketService.getCoinMarket(query);
     }
 
 }

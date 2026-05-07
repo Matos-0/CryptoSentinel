@@ -1,34 +1,56 @@
 version: '3.8'
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
-    container_name: elasticsearch_webflux
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: timescaledb
+    restart: always
     environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Limite de RAM
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+      - POSTGRES_USER=crypto_sentinel
+      - POSTGRES_PASSWORD=p0stgr3s
+      - POSTGRES_DB=crypto_monitor
     ports:
-      - "9200:9200"
-    networks:
-      - elastic-net
+      - "5432:5432"
+    volumes:
+      - ts_data:/var/lib/postgresql/data
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.10
-    container_name: kibana_webflux
+  redis:
+    image: redis:alpine
+    container_name: redis_cache
     ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    depends_on:
-      - elasticsearch
-    networks:
-      - elastic-net
+      - "6379:6379"
 
-networks:
-  elastic-net:
-    driver: bridge
+volumes:
+  ts_data:
+
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+#    container_name: elasticsearch_webflux
+#    environment:
+#      - discovery.type=single-node
+#      - bootstrap.memory_lock=true
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Limite de RAM
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    ports:
+#      - "9200:9200"
+#    networks:
+#      - elastic-net
+#
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:7.17.10
+#    container_name: kibana_webflux
+#    ports:
+#      - "5601:5601"
+#    environment:
+#      - ELASTICSEARCH_URL=http://elasticsearch:9200
+#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - elastic-net
+#
+#networks:
+#  elastic-net:
+#    driver: bridge
