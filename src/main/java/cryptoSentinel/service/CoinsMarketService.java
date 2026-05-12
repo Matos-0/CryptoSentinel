@@ -45,12 +45,12 @@ public class CoinsMarketService {
                 .bodyToMono(CoinsMarketsDTO.class)
                 .map(CoinsMarket::new)
                 .flatMap(coinsMarketRepository::save)
-                .doFinally(signalType ->
-                    log.info("Finalizada a tentativa de persistência. Sinal: {}", signalType)
+                .doFinally(e ->
+                    log.info("Error while trying to save data.: {}", e)
                 )
                 .map(CoinsMarket::getId)
                 .onErrorResume(e -> {
-                    log.error("Erro ao processar API: {}", e.getMessage());
+                    log.error("Error processing API: {}", e.getMessage());
                     return Mono.empty();
                 });
     }
@@ -66,7 +66,7 @@ public class CoinsMarketService {
         coinsMarketRepository.saveAll(entityFlux)
                 .map(CoinsMarket::getId)
                 .onErrorResume(e -> {
-                    log.error("Erro ao salvar registros: %s", e);
+                    log.error("Error while trying to save data.: %s", e);
                     return Flux.empty();
                 });
     }
